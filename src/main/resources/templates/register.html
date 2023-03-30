@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Page</title>
+    <style>
+        body {
+            background-color: #f1f1f1;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px #ccc;
+            margin: 0 auto;
+            max-width: 400px;
+            padding: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="email"]{
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            display: block;
+            font-size: 16px;
+            padding: 10px;
+            width: 95%;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 3px;
+            color: #fff;
+            cursor: pointer;
+            display: block;
+            font-size: 16px;
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+        }
+        input[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+        .error {
+            color: #f00;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Registration Form</h1>
+    <form>
+        <label>Username:</label>
+        <input type="text" name="username">
+        <label>First Name:</label>
+        <input type="text" name="firstName">
+        <label>Last Name:</label>
+        <input type="text" name="lastName">
+        <label>Email:</label>
+        <input type="email" name="email">
+        <label>CNP:</label>
+        <input type="text" name="cnp">
+        <label>Phone Number:</label>
+        <input type="text" name="phoneNumber">
+        <label>Password:</label>
+        <input type="password" name="password">
+        <input type="submit" value="Register">
+    </form>
+</div>
+</body>
+</html>
