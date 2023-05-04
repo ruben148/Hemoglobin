@@ -16,5 +16,5 @@ public class DoctorDTO {
     private String email;
     private String cnp;
     private String phoneNumber;
-    private DonationCenter donationCenter;
+    private DonationCenterDTO donationCenter;
 }

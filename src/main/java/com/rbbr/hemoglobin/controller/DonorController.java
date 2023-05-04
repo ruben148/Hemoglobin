@@ -1,121 +1,73 @@
 package com.rbbr.hemoglobin.controller;
 
-import com.rbbr.hemoglobin.dto.DoctorDTO;
 import com.rbbr.hemoglobin.dto.DonorCreateDTO;
 import com.rbbr.hemoglobin.dto.DonorDTO;
 import com.rbbr.hemoglobin.dto.UserLoginDTO;
-import com.rbbr.hemoglobin.entity.Donor;
 import com.rbbr.hemoglobin.service.DonorService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
-@Controller
-@RequestMapping("")
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+@RequestMapping("/api/donor")
 public class DonorController {
     @Autowired
     private DonorService donorService;
 
-    @GetMapping(value = {"/", ""})
-    public String getUserLoginPage(HttpSession session) {
+    @GetMapping("/{id}")
+    public ResponseEntity<DonorDTO> getDonor(@PathVariable Long id, HttpSession session) {
+        System.out.println("Trying to send donor with id: " + id + " to frontend...");
+        //String userType = (String) session.getAttribute("userType");
+        //if (userType == null || !userType.equals("admin"))
+            //return ResponseEntity.badRequest().build();
 
-        String userType = (String) session.getAttribute("userType");
-        if (userType != null && userType.equals("donor"))
-            return "redirect:/home";
-
-        return "login_r.html";
+        DonorDTO donor = donorService.findById(id);
+        if(donor == null)
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(donor);
     }
 
-    @PostMapping(value = {"/", ""})
-    public String login(@ModelAttribute("userLoginDTO") UserLoginDTO userLoginDTO, HttpServletRequest request, Model model) {
-        DonorDTO donorDTO = donorService.login(userLoginDTO.getUsername(), userLoginDTO.getPassword(), request);
-        if (donorDTO != null)
-            return "redirect:/home";
-        model.addAttribute("error", true);
-        return "login_r.html";
-    }
+    @PutMapping("/{id}/edit")
+    public ResponseEntity<DonorDTO> editDonor(@RequestBody DonorDTO donor, HttpSession session) {
+        System.out.println("Trying to edit donor with id: " + donor.getId() + "...");
+        //String userType = (String) session.getAttribute("userType");
+        //if (userType == null || !userType.equals("admin"))
+        //return ResponseEntity.badRequest().build();
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.removeAttribute("userType");
-        return "redirect:/";
-    }
-
-    @GetMapping("/home")
-    public String getHomePage(HttpSession session){
-
-        String userType = (String) session.getAttribute("userType");
-
-        if (userType == null || !userType.equals("donor"))
-            return "redirect:/";
-        return "home.html";
-    }
-
-    @GetMapping("/register")
-    public String getRegistrationPage(HttpSession session){
-
-        String userType = (String) session.getAttribute("userType");
-
-        if (userType != null)
-            return "redirect:/";
-        return "register.html";
+        donorService.update(donor);
+        return ResponseEntity.ok(donor);
     }
 
     @PostMapping(value = {"/register"})
-    public String register(@ModelAttribute("userLoginDTO") DonorCreateDTO donorCreateDTO, Model model) {
+    public ResponseEntity<DonorDTO> register(@RequestBody DonorCreateDTO donorCreateDTO) {
+        System.out.println("Trying to register user with username: " + donorCreateDTO.getUsername() + " and password: " + donorCreateDTO.getPassword() + "...");
         DonorDTO donorDTO = donorService.register(donorCreateDTO);
         //TODO email and phone number check in register method
+        return ResponseEntity.ok(donorDTO);
+    }
+
+    /*
+    @PostMapping(value = {"/login", ""})
+    public ResponseEntity<DonorDTO> login(@RequestBody UserLoginDTO userLoginDTO, HttpServletRequest request) {
+        System.out.println("Trying to log in user with username: " + userLoginDTO.getUsername() + " and password: " + userLoginDTO.getPassword() + "...");
+        DonorDTO donorDTO = donorService.login(userLoginDTO.getUsername(), userLoginDTO.getPassword(), request);
         if (donorDTO != null)
-            return "redirect:/";
-        model.addAttribute("error", true);
-        return "register.html";
+            return ResponseEntity.ok(donorDTO);
+        return ResponseEntity.badRequest().build();
     }
+    */
 
-
-
-    @GetMapping("/edit/{id}")
-    public String editDonor(@PathVariable Long id, Model model, HttpSession session) {
-
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<?> deleteDonor(HttpSession session, @PathVariable Long id) {
         String userType = (String) session.getAttribute("userType");
-        if (userType == null || !userType.equals("admin"))
-            return "redirect:/admin/";
-
-        DoctorDTO doctor = doctorService.findById(id);
-        if(doctor == null)
-            return "redirect:/admin/dashboard";
-        model.addAttribute("doctor", doctor);
-        return "edit_doctor";
-    }
-
-    @PostMapping("/edit")
-    public String editDonor(HttpSession session, @ModelAttribute("doctor") DoctorDTO doctor,
-                             RedirectAttributes redirectAttributes){
-
-        String userType = (String) session.getAttribute("userType");
-        if (userType == null || !userType.equals("admin"))
-            return "redirect:/admin/";
-
-        doctorService.update(doctor);
-
-        redirectAttributes.addFlashAttribute("message", "Doctor information updated successfully!");
-        return "redirect:/admin/dashboard";
-    }
-
-    @RequestMapping("/delete-doctor/{id}")
-    public String deleteDoctor(HttpSession session, @PathVariable Long id) {
-        String userType = (String) session.getAttribute("userType");
-        if (userType == null || !userType.equals("admin"))
-            return "redirect:/admin/";
-        doctorService.delete(id);
-        return "redirect:/admin/dashboard";
+        //if (userType == null || !userType.equals("admin"))
+            //return "redirect:/admin/";
+        donorService.delete(id);
+        return ResponseEntity.ok().build();
+        //return "redirect:/admin/dashboard";
     }
 
 }

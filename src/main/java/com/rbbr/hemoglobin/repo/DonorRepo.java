@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface DonorRepo extends JpaRepository<Donor, Long> {
     Optional<Donor> findByUsernameAndPassword(String username, String password);
+
+    Optional<Donor> findByUsername(String username);
 }

@@ -8,17 +8,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class DonorMapper {
 
-    public Donor toDonor(DonorCreateDTO donorCreateDTO){
+    public static Donor toDonor(DonorCreateDTO donorCreateDTO){
         Donor donor = new Donor();
         donor.setUsername(donorCreateDTO.getUsername());
         donor.setCnp(donorCreateDTO.getCnp());
         donor.setEmail(donorCreateDTO.getEmail());
         donor.setPhoneNumber(donorCreateDTO.getPhoneNumber());
         donor.setPassword(donorCreateDTO.getPassword());
+        donor.setFirstName(donorCreateDTO.getFirstName());
+        donor.setLastName(donorCreateDTO.getLastName());
         return donor;
     }
 
-    public DonorDTO toDonorDTO(Donor donor){
+    public static DonorDTO toDonorDTO(Donor donor){
         DonorDTO donorDTO = new DonorDTO();
         donorDTO.setId(donor.getId());
         donorDTO.setCnp(donor.getCnp());
@@ -26,6 +28,26 @@ public class DonorMapper {
         donorDTO.setUsername(donor.getUsername());
         donorDTO.setBloodType(donor.getBloodType());
         donorDTO.setPhoneNumber(donor.getPhoneNumber());
+        donorDTO.setFirstName(donor.getFirstName());
+        donorDTO.setLastName(donor.getLastName());
         return donorDTO;
+    }
+
+    public static Donor toDonor(Donor donor, DonorDTO donorDTO) {
+        if (donorDTO.getCnp() != null)
+            donor.setCnp(donorDTO.getCnp());
+        if (donorDTO.getEmail() != null)
+            donor.setEmail(donorDTO.getEmail());
+        if (donorDTO.getUsername() != null)
+            donor.setUsername(donorDTO.getUsername());
+        if (donorDTO.getBloodType() != null)
+            donor.setBloodType(donorDTO.getBloodType());
+        if (donorDTO.getPhoneNumber() != null)
+            donor.setPhoneNumber(donorDTO.getPhoneNumber());
+        if (donorDTO.getFirstName() != null)
+            donor.setFirstName(donorDTO.getFirstName());
+        if (donorDTO.getLastName() != null)
+            donor.setLastName(donorDTO.getLastName());
+        return donor;
     }
 }

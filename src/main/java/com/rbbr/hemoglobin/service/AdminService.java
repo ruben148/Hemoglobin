@@ -7,5 +7,4 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface AdminService {
-    public AdminDTO login(String username, String password, HttpServletRequest request);
 }

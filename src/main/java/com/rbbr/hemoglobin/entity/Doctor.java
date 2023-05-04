@@ -6,16 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "doctor")
+@DiscriminatorValue("DOCTOR")
 @Getter @Setter @NoArgsConstructor
-public class Doctor {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
-    String username;
+public class Doctor extends User {
     String firstName;
     String lastName;
-    String password;
     String email;
     String cnp;
     String phoneNumber;

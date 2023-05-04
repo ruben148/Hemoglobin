@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "appointment")
@@ -14,10 +15,13 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "donation_center_id")
     DonationCenter donationCenter;
     @OneToOne
     Donor donor;
-    Date date;
+    LocalDate date;
+    Boolean emailNotification;
+    Boolean smsNotification;
+    int status;
 }
